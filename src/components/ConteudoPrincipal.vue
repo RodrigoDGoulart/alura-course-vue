@@ -1,22 +1,33 @@
 <script lang="ts">
 import SelecionarIngredientes from './SelecionarIngredientes.vue';
 import SuaLista from './SuaLista.vue';
-import BotaoPrincipal from './BotaoPrincipal.vue';
 import Rodape from './Rodape.vue';
+import MostrarReceitas from './MostrarReceitas.vue';
+
+type Pagina = 'SelecionarIngredientes' | 'MostrarReceitas'
 
 export default {
   data() {
     return {
-      ingredientes: [] as string[]
+      ingredientes: [] as string[],
+      conteudo: 'SelecionarIngredientes' as Pagina
     }
   },
-  components: { SelecionarIngredientes, SuaLista, BotaoPrincipal, Rodape },
+  components: {
+    SelecionarIngredientes,
+    SuaLista,
+    Rodape,
+    MostrarReceitas,
+  },
   methods: {
     adicionarIngrediente(ingrediente: string) {
       this.ingredientes.push(ingrediente);
     },
     removerIngrediente(ingrediente: string) {
       this.ingredientes = this.ingredientes.filter(item => item !== ingrediente);
+    },
+    navegar(pagina: Pagina) {
+      this.conteudo = pagina;
     }
   }
 }
@@ -25,9 +36,11 @@ export default {
 <template>
   <main class="conteudo-principal">
     <SuaLista :ingredientes="ingredientes" />
-    <SelecionarIngredientes @adicionar-ingrediente="adicionarIngrediente($event)"
-      @remover-ingrediente="removerIngrediente($event)" />
-    <BotaoPrincipal />
+    <SelecionarIngredientes v-if="conteudo === 'SelecionarIngredientes'"
+      @adicionar-ingrediente="adicionarIngrediente($event)" @remover-ingrediente="removerIngrediente($event)"
+      @buscar-receitas="navegar('MostrarReceitas')" />
+
+    <MostrarReceitas v-else-if="conteudo === 'MostrarReceitas'" />
   </main>
   <Rodape />
 </template>
