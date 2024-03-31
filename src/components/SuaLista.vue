@@ -1,10 +1,11 @@
 <script lang="ts">
+import type { PropType } from 'vue';
 import Tag from './Tag.vue';
 export default {
-  data() {
-    return {
-      ingredientes: ['Alho', 'Manteiga', 'Orégano']
-      // ingredientes: []
+  props: {
+    ingredientes: {
+      type: Array<string>,
+      required: true,
     }
   },
   components: { Tag }
